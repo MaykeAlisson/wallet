@@ -1,0 +1,21 @@
+version: "3.9"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: "mysql-carteira"
+    restart: always
+    tty: true
+    environment:
+      MYSQL_DATABASE: carteira
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./.mysql/data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - carteira
+
+networks:
+  carteira:
+    driver: "bridge"
