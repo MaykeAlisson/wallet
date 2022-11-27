@@ -14,8 +14,8 @@ export const OrmConfig: DataSourceOptions = {
     username: configService.get('DATABASE_USER'),
     password: configService.get('DATABASE_PASSWORD'),
     database: configService.get('DATABASE_NAME'),
-    entities: [],
-    migrations: []
+    entities: ['dist/**/*.entity.js'],
+    migrations: ['dist/migrations/*.js']
 };
 
 export default new DataSource(OrmConfig);

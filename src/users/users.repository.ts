@@ -7,7 +7,7 @@ import { User } from "./entities/user.entity";
 export default class UsersRepository {
     constructor(@InjectRepository(User) private readonly userRepository: Repository<User>){}
 
-    save(){
-        this.userRepository.save()
+    save(user: User){
+        return this.userRepository.save(user)
     }
 }
