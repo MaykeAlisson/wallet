@@ -4,16 +4,14 @@
 Gerar module -> nest g resource <Name>
 
 ##### TypeOrm
-Criar migration -> npx typeorm migration:create <Path>
-Run migration -> npm build -> npx typorm migration:run -d <Path_aquivo_DATA_SOURCE>(dist/database/data-source.js)
+Criar migration -> npx typeorm migration:create <Path>(./src/database/migrations/createTableUser)
+Run migration -> npm run build -> npx typorm migration:run -d <Path_aquivo_DATA_SOURCE>(dist/database/data-source.js)
 
 
 ##### Run
 
 Dev -> npm start:dev
 Build -> npm build
-
-
 
 
 . O usuario pode ter mais de uma carteira, ao cadastrar ativo deve escolher a carteira, os graficos serao exibidos por carteiras
@@ -44,4 +42,4 @@ v2
     . Lucro, Faturamento VER OQUE MAIS E DIVULGADO
 
 v3 
-. Job para enviar email de venda quando um ativo passar do definido para a carteira    
+. Job para enviar email de venda quando um ativo passar do definido para a carteira  (nestjs/schedule)  
