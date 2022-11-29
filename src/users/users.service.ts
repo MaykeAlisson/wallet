@@ -1,32 +1,37 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import UsersRepository from './users.repository';
+import { hashSync } from 'bcrypt';
+import { AccessDto } from 'src/auth/dto/access-auth.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly userRepository: UsersRepository) { }
+  constructor(
+    private readonly userRepository: UsersRepository
+  ) {}
 
   async create(createUserDto: CreateUserDto) {
+    // verificar se email ja nao existe
+
     const userEntity = new User();
     userEntity.name = createUserDto.name;
     userEntity.email = createUserDto.email;
-    userEntity.password = createUserDto.password;
-    userEntity.created = new Date()
+    userEntity.password = hashSync(createUserDto.password, 10);
+    userEntity.created = new Date();
 
-    const result =  await this.userRepository.save(userEntity);
-    console.log('user')
-    console.log(JSON.stringify(result))
-    return 'This action adds a new user';
+    await this.userRepository.save(userEntity);
+
+    return {};
   }
 
-  findAll() {
-    return `This action returns all users`;
-  }
+  async findByEmail(email: string) {
+    const user = await this.userRepository.findByEmail(email);
+    if (!user)
+      throw new NotFoundException(`not register user whith email ${email}`);
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+    return user;
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {

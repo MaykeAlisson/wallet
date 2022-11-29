@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config'
+import { ConfigModule } from '@nestjs/config'
 import { validateEnvironmentVariables } from './env.validation';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { OrmConfig } from './database/data-source';
 import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -12,7 +13,8 @@ import { UsersModule } from './users/users.module';
       isGlobal: true
     }),
     TypeOrmModule.forRoot(OrmConfig),
-    UsersModule
+    UsersModule,
+    AuthModule
   ],
   controllers: [],
   providers: [],
