@@ -4,7 +4,6 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import UsersRepository from './users.repository';
 import { hashSync } from 'bcrypt';
-import { AccessDto } from 'src/auth/dto/access-auth.dto';
 
 @Injectable()
 export class UsersService {
