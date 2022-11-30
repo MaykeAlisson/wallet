@@ -13,11 +13,8 @@ export class AuthService {
 
   async validateUser(email: string, password: string) {
     let user: User
-    console.log('validuser')
-    console.log(email)
     try {
       user = await this.usersService.findByEmail(email);
-      console.log(user)
     } catch (error) {
       return null;
     }

@@ -1,6 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
+
+const mockeRepository = {
+  insert: jest.fn()
+}
 
 describe('UsersController', () => {
   let controller: UsersController;
@@ -8,8 +14,17 @@ describe('UsersController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UsersController],
-      providers: [UsersService],
-    }).compile();
+      providers: [
+        UsersService
+      ],
+    })
+    .useMocker((token) => {
+      if(token === 'UserRepository'){
+        return mockeRepository
+      }
+    }
+    
+    ).compile();
 
     controller = module.get<UsersController>(UsersController);
   });
