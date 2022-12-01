@@ -1,21 +1,29 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import UsersRepository from './users.repository';
 import { hashSync } from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { isEmpty } from 'class-validator';
+import { nvl } from './provider/user.nvl';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>
+    private readonly userRepository: Repository<User>,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    // verificar se email ja nao existe
+    const exist = await this.existUserByEmail(createUserDto.email);
+
+    if (exist) throw new BadRequestException(`Email already registered`);
 
     const userEntity = new User();
     userEntity.name = createUserDto.name;
@@ -23,7 +31,7 @@ export class UsersService {
     userEntity.password = hashSync(createUserDto.password, 10);
     userEntity.created = new Date();
 
-    await this.userRepository.save(userEntity);
+    await this.userRepository.insert(userEntity);
 
     return {};
   }
@@ -36,11 +44,37 @@ export class UsersService {
     return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto, userId: number) {
+    const user = await this.userById(id);
+
+    if (user.id != userId) throw new ForbiddenException();
+
+    const entity = this.userRepository.create(nvl(user, updateUserDto));
+
+    await this.userRepository.save(entity);
+
+    return {};
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number, userId: number) {
+    const user = await this.userById(id);
+
+    if (user.id != userId) throw new ForbiddenException();
+
+    await this.userRepository.delete(user);
+
+    return {};
+  }
+
+  private async existUserByEmail(email: string) {
+    const user = await this.userRepository.findOneBy({ email });
+    return isEmpty(user) ? false : true;
+  }
+
+  private async userById(id: number) {
+    const user = await this.userRepository.findOneBy({ id });
+    if (!user) throw new NotFoundException(`not register user whith id ${id}`);
+
+    return user;
   }
 }
