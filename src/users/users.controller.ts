@@ -4,7 +4,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard } from '@nestjs/passport';
 
-@Controller('api/users')
+@Controller('users')
 export class UsersController {
   constructor(
     private readonly usersService: UsersService
@@ -19,13 +19,13 @@ export class UsersController {
   @Patch(':id')
   async update(@Req() req, @Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     const userId =req.user.id;
-    return this.usersService.update(+id, updateUserDto, userId);
+    return await this.usersService.update(+id, updateUserDto, userId);
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
   async remove(@Req() req, @Param('id') id: string) {
     const userId =req.user.id;
-    return this.usersService.remove(+id, userId);
+    return await this.usersService.remove(+id, userId);
   }
 }

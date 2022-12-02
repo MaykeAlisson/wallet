@@ -1,19 +1,20 @@
 import { Entity, Column, PrimaryGeneratedColumn} from 'typeorm'
 
-@Entity('users')
-export class User {
+@Entity('wallets')
+export class Wallet {
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column()
     name: string;
 
-    @Column()
-    email: string;
+    @Column({ name:'max_percent_assert'})
+    maxPecentAssert: number;
 
-    @Column()
-    password: string;
+    @Column({ name:'user_id'})
+    userId: number;
 
     @Column({ name: 'create_at', default: new Date()})
     created: Date;
+
 }
