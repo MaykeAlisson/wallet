@@ -6,6 +6,7 @@ import { OrmConfig } from './database/data-source';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { WalletModule } from './wallet/wallet.module';
+import { RulesModule } from './rules/rules.module';
 
 @Module({
   imports: [
@@ -16,7 +17,8 @@ import { WalletModule } from './wallet/wallet.module';
     TypeOrmModule.forRoot(OrmConfig),
     UsersModule,
     AuthModule,
-    WalletModule
+    WalletModule,
+    RulesModule
   ],
   controllers: [],
   providers: [],

@@ -74,7 +74,6 @@ export class UsersService {
   async userById(id: number) {
     const user = await this.userRepository.findOneBy({ id });
     if (!user) throw new NotFoundException(`not register user whith id ${id}`);
-
     return user;
   }
 }
