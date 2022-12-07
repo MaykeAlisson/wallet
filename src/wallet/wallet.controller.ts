@@ -8,13 +8,13 @@ import {
   Delete,
   UseGuards,
   Req,
+  ParseArrayPipe,
 } from '@nestjs/common';
 import { WalletService } from './wallet.service';
 import { CreateWalletDto } from './dto/create-wallet.dto';
 import { UpdateWalletDto } from './dto/update-wallet.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateRuleTypeDto } from '../rules/dto/create-rule-type.dto';
-import { UpdateRuleTypeDto } from 'src/rules/dto/update-rule-type.dto';
 import { CreateRuleCategoryDto } from 'src/rules/dto/create-rule-category';
 import { UpdateRuleCategoryDto } from 'src/rules/dto/update-rule-category';
 import { CreateRuleCoinDto } from 'src/rules/dto/create-rule-coin';
@@ -22,13 +22,10 @@ import { UpdateRuleCoinDto } from 'src/rules/dto/update-rule-coin';
 import { CreateRuleCategoryAmountDto } from 'src/rules/dto/create-rule-category-amount';
 import { UpdateRuleCategoryAmountDto } from 'src/rules/dto/update-rule-category-amount';
 
-
 @UseGuards(AuthGuard('jwt'))
 @Controller('wallet')
 export class WalletController {
-  constructor(
-    private readonly walletService: WalletService
-  ) {}
+  constructor(private readonly walletService: WalletService) {}
 
   @Post()
   async create(@Req() req, @Body() createWalletDto: CreateWalletDto) {
@@ -68,36 +65,28 @@ export class WalletController {
   async createRuleType(
     @Req() req,
     @Param('walletId') walletId: string,
-    @Body() createRuleTypeDto: CreateRuleTypeDto,
+    @Body(new ParseArrayPipe({ items: CreateRuleTypeDto }))
+    createRuleTypeDto: CreateRuleTypeDto[],
   ) {
     const userId = req.user.id;
-    return this.walletService.createRuleType(userId, +walletId, createRuleTypeDto);
+    return this.walletService.createRuleType(
+      userId,
+      +walletId,
+      createRuleTypeDto,
+    );
   }
 
   @Get(':walletId/rule/type')
-  async findAllRuleType(@Req() req, @Param('walletId') walletId: string) {}
+  async findAllRuleType(@Req() req, @Param('walletId') walletId: string) {
+    const userId = req.user.id;
+    return this.walletService.findAllRuleType(userId, +walletId);
+  }
 
-  @Get(':walletId/rule/type/:id')
-  async findOneRuleType(
-    @Req() req,
-    @Param('walletId') walletId: string,
-    @Param('id') id: string,
-  ) {}
-
-  @Patch(':walletId/rule/type/:id')
-  async updateRuleType(
-    @Req() req,
-    @Param('walletId') walletId: string,
-    @Param('id') id: string,
-    @Body() upadateRuleTypeDto: UpdateRuleTypeDto,
-  ) {}
-
-  @Delete(':walletId/rule/type/:id')
-  async deleteRuleType(
-    @Req() req,
-    @Param('walletId') walletId: string,
-    @Param('id') id: string,
-  ) {}
+  @Delete(':walletId/rule/type')
+  async deleteRuleType(@Req() req, @Param('walletId') walletId: string) {
+    const userId = req.user.id;
+    return this.walletService.deleteAllRuleType(userId, +walletId);
+  }
 
   @Post(':walletId/rule/category')
   async createRuleCategory(

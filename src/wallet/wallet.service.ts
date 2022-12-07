@@ -13,7 +13,6 @@ import { UsersService } from 'src/users/users.service';
 import { User } from 'src/users/entities/user.entity';
 import { CreateRuleTypeDto } from 'src/rules/dto/create-rule-type.dto';
 
-
 @Injectable()
 export class WalletService {
   constructor(
@@ -23,7 +22,7 @@ export class WalletService {
     private readonly rulesTypeService: RulesTypeService,
     private readonly rulesCategoryService: RulesCategoryService,
     private readonly rulesCoinService: RulesCoinService,
-    private readonly rulesCategoryAmountSevice: RulesCategoryAmountService
+    private readonly rulesCategoryAmountSevice: RulesCategoryAmountService,
   ) {}
 
   async create(userId: number, createWalletDto: CreateWalletDto) {
@@ -76,12 +75,26 @@ export class WalletService {
     return {};
   }
 
-  async createRuleType(userId: number, walletId: number, dto: CreateRuleTypeDto){
+  async createRuleType(
+    userId: number,
+    walletId: number,
+    dtos: CreateRuleTypeDto[],
+  ) {
     await this.findByIdAndUser(walletId, userId);
-    return this.rulesTypeService.createRule(walletId, dto);
+    return this.rulesTypeService.createRule(walletId, dtos);
   }
 
-  private async findByIdAndUser(id: number, userId: number) : Promise<Wallet> {
+  async findAllRuleType(userId: number, walletId: number) {
+    await this.findByIdAndUser(walletId, userId);
+    return this.rulesTypeService.findAll(walletId);
+  }
+
+  async deleteAllRuleType(userId: number, walletId: number) {
+    await this.findByIdAndUser(walletId, userId);
+    return this.rulesTypeService.remove(walletId);
+  }
+
+  private async findByIdAndUser(id: number, userId: number): Promise<Wallet> {
     await this.checkUser(userId);
     const wallet = await this.walletRepository.findOneBy({ id, userId });
     if (!wallet)
@@ -91,7 +104,7 @@ export class WalletService {
     return wallet;
   }
 
-  private async checkUser(userId: number) : Promise<User>{
-   return await this.userService.userById(userId);
+  private async checkUser(userId: number): Promise<User> {
+    return await this.userService.userById(userId);
   }
 }
