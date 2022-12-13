@@ -9,8 +9,8 @@ import { UpdateRuleCoinDto } from './dto/update-rule-coin';
 export class RulesCoinService {
   constructor(
     @InjectRepository(RulePercentCoin)
-    private readonly repository: Repository<RulePercentCoin>
-  ){}
+    private readonly repository: Repository<RulePercentCoin>,
+  ) {}
 
   async createRule(walletId: number, rule: CreateRuleCoinDto) {
     return 'This action adds a new rule';

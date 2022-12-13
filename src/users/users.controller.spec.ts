@@ -9,7 +9,7 @@ const repositoryMock = {
   findOneBy: jest.fn(),
   create: jest.fn(),
   save: jest.fn(),
-  delete: jest.fn()
+  delete: jest.fn(),
 };
 
 describe('UsersController', () => {
@@ -142,7 +142,6 @@ describe('UsersController', () => {
   });
 
   describe('.delete', () => {
-
     it('when delete user returns success', async () => {
       const req = {
         user: {
@@ -159,18 +158,17 @@ describe('UsersController', () => {
       };
 
       jest
-      .spyOn(repositoryMock, 'findOneBy')
-      .mockImplementationOnce(() => Promise.resolve(entity));
+        .spyOn(repositoryMock, 'findOneBy')
+        .mockImplementationOnce(() => Promise.resolve(entity));
 
-    jest
-      .spyOn(httpServer, 'delete')
-      .mockImplementationOnce(() => Promise.resolve({}));
+      jest
+        .spyOn(httpServer, 'delete')
+        .mockImplementationOnce(() => Promise.resolve({}));
 
       const result = await controller.remove(req, '1');
 
       expect(result).toMatchObject({});
       expect(repositoryMock.delete).toHaveBeenCalledTimes(1);
-
     });
 
     it('when delete user different from token return error', async () => {
@@ -189,16 +187,15 @@ describe('UsersController', () => {
       };
 
       jest
-      .spyOn(repositoryMock, 'findOneBy')
-      .mockImplementationOnce(() => Promise.resolve(entity));
+        .spyOn(repositoryMock, 'findOneBy')
+        .mockImplementationOnce(() => Promise.resolve(entity));
 
-    jest
-      .spyOn(httpServer, 'delete')
-      .mockImplementationOnce(() => Promise.resolve({}));
+      jest
+        .spyOn(httpServer, 'delete')
+        .mockImplementationOnce(() => Promise.resolve({}));
 
       expect(controller.remove(req, '1')).rejects.toThrowError();
       expect(repositoryMock.delete).toHaveBeenCalledTimes(0);
-
     });
   });
 });

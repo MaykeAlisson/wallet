@@ -1,12 +1,11 @@
-import { IsNotEmpty} from "class-validator";
+import { IsNotEmpty } from 'class-validator';
 
 export class CreateWalletDto {
+  id: number;
 
-    id: number;
+  @IsNotEmpty()
+  name: string;
 
-    @IsNotEmpty()
-    name: string;
-
-    @IsNotEmpty()
-    max_pecent_assert: number;
+  @IsNotEmpty()
+  max_pecent_assert: number;
 }

@@ -15,12 +15,12 @@ import { CreateWalletDto } from './dto/create-wallet.dto';
 import { UpdateWalletDto } from './dto/update-wallet.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateRuleTypeDto } from '../rules/dto/create-rule-type.dto';
-import { CreateRuleCategoryDto } from 'src/rules/dto/create-rule-category';
-import { UpdateRuleCategoryDto } from 'src/rules/dto/update-rule-category';
-import { CreateRuleCoinDto } from 'src/rules/dto/create-rule-coin';
-import { UpdateRuleCoinDto } from 'src/rules/dto/update-rule-coin';
-import { CreateRuleCategoryAmountDto } from 'src/rules/dto/create-rule-category-amount';
-import { UpdateRuleCategoryAmountDto } from 'src/rules/dto/update-rule-category-amount';
+import { CreateRuleCategoryDto } from '../rules/dto/create-rule-category';
+import { UpdateRuleCategoryDto } from '../rules/dto/update-rule-category';
+import { CreateRuleCoinDto } from '../rules/dto/create-rule-coin';
+import { UpdateRuleCoinDto } from '../rules/dto/update-rule-coin';
+import { CreateRuleCategoryAmountDto } from '../rules/dto/create-rule-category-amount';
+import { UpdateRuleCategoryAmountDto } from '../rules/dto/update-rule-category-amount';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('wallet')

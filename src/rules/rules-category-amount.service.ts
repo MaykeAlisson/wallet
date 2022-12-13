@@ -9,8 +9,8 @@ import { UpdateRuleCategoryAmountDto } from './dto/update-rule-category-amount';
 export class RulesCategoryAmountService {
   constructor(
     @InjectRepository(RuleAmountCategory)
-    private readonly repository: Repository<RuleAmountCategory>
-  ){}
+    private readonly repository: Repository<RuleAmountCategory>,
+  ) {}
 
   async createRule(walletId: number, rule: CreateRuleCategoryAmountDto) {
     return 'This action adds a new rule';

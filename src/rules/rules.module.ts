@@ -10,9 +10,26 @@ import { RulesCoinService } from './rules-coin.service';
 import { RulesCategoryAmountService } from './rules-category-amount.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([RulePercentType, RulePercentCategory, RulePercentCoin, RuleAmountCategory])],
+  imports: [
+    TypeOrmModule.forFeature([
+      RulePercentType,
+      RulePercentCategory,
+      RulePercentCoin,
+      RuleAmountCategory,
+    ]),
+  ],
   controllers: [],
-  providers: [RulesTypeService, RulesCategoryService, RulesCoinService, RulesCategoryAmountService],
-  exports: [RulesTypeService, RulesCategoryService, RulesCoinService, RulesCategoryAmountService]
+  providers: [
+    RulesTypeService,
+    RulesCategoryService,
+    RulesCoinService,
+    RulesCategoryAmountService,
+  ],
+  exports: [
+    RulesTypeService,
+    RulesCategoryService,
+    RulesCoinService,
+    RulesCategoryAmountService,
+  ],
 })
 export class RulesModule {}

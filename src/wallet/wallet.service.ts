@@ -6,12 +6,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { nvl } from './provider/wallet.nvl';
 import { RulesTypeService } from '../rules/rules-type.service';
-import { RulesCategoryService } from 'src/rules/rules-category.service';
-import { RulesCoinService } from 'src/rules/rules-coin.service';
-import { RulesCategoryAmountService } from 'src/rules/rules-category-amount.service';
-import { UsersService } from 'src/users/users.service';
-import { User } from 'src/users/entities/user.entity';
-import { CreateRuleTypeDto } from 'src/rules/dto/create-rule-type.dto';
+import { RulesCategoryService } from '../rules/rules-category.service';
+import { RulesCoinService } from '../rules/rules-coin.service';
+import { RulesCategoryAmountService } from '../rules/rules-category-amount.service';
+import { UsersService } from '../users/users.service';
+import { User } from '../users/entities/user.entity';
+import { CreateRuleTypeDto } from '../rules/dto/create-rule-type.dto';
 
 @Injectable()
 export class WalletService {
