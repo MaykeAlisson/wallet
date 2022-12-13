@@ -6,7 +6,6 @@ import { UsersService } from '../users/users.service';
 import { WalletController } from './wallet.controller';
 import { WalletService } from './wallet.service';
 import { RulesCategoryAmountService } from '../rules/rules-category-amount.service';
-import { UsersModule } from '../users/users.module';
 
 const repositoryMock = {
   insert: jest.fn(),
@@ -17,6 +16,12 @@ const httpServer = {
   post: jest.fn(),
   path: jest.fn(),
   delete: jest.fn(),
+};
+
+const req = {
+  user: {
+    id: 1,
+  },
 };
 
 describe('WalletController', () => {
@@ -58,7 +63,6 @@ describe('WalletController', () => {
 
     controller = module.get<WalletController>(WalletController);
   });
-
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
