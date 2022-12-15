@@ -1,10 +1,9 @@
-import { MigrationInterface, QueryRunner } from "typeorm"
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class createTableAsserts1669666936812 implements MigrationInterface {
-
-    public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(
-            `
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(
+      `
             CREATE TABLE asserts(
             id BIGINT NOT NULL auto_increment,
             name VARCHAR(50) NOT NULL,
@@ -20,15 +19,14 @@ export class createTableAsserts1669666936812 implements MigrationInterface {
             PRIMARY KEY (id)
             )ENGINE=INNODB default charset = utf8;
             `,
-          );
-    }
+    );
+  }
 
-    public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(
-            `
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(
+      `
             DROP TABLE IF EXISTS asserts CASCADE; 
             `,
-          );
-    }
-
+    );
+  }
 }

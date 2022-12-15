@@ -12,6 +12,7 @@ import { RulesCategoryAmountService } from '../rules/rules-category-amount.servi
 import { UsersService } from '../users/users.service';
 import { User } from '../users/entities/user.entity';
 import { CreateRuleTypeDto } from '../rules/dto/create-rule-type.dto';
+import { CreateRuleCategoryDto } from 'src/rules/dto/create-rule-category';
 
 @Injectable()
 export class WalletService {
@@ -92,6 +93,24 @@ export class WalletService {
   async deleteAllRuleType(userId: number, walletId: number) {
     await this.findByIdAndUser(walletId, userId);
     return this.rulesTypeService.remove(walletId);
+  }
+
+  async createRuleCategory(
+    userId: number,
+    walletId: number,
+    rules: CreateRuleCategoryDto[],
+  ) {
+    await this.findByIdAndUser(walletId, userId);
+    return this.rulesCategoryService.createRule(walletId, rules);
+  }
+
+  async findAllRuleCategory(userId: number, walletId: number) {
+    await this.findByIdAndUser(walletId, userId);
+    return this.rulesCategoryService.findAll(walletId);
+  }
+
+  async deleteRuleCategory(userId: number, walletId: number) {
+    await this.findByIdAndUser(walletId, userId);
   }
 
   private async findByIdAndUser(id: number, userId: number): Promise<Wallet> {

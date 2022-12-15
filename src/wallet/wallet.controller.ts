@@ -16,7 +16,6 @@ import { UpdateWalletDto } from './dto/update-wallet.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateRuleTypeDto } from '../rules/dto/create-rule-type.dto';
 import { CreateRuleCategoryDto } from '../rules/dto/create-rule-category';
-import { UpdateRuleCategoryDto } from '../rules/dto/update-rule-category';
 import { CreateRuleCoinDto } from '../rules/dto/create-rule-coin';
 import { UpdateRuleCoinDto } from '../rules/dto/update-rule-coin';
 import { CreateRuleCategoryAmountDto } from '../rules/dto/create-rule-category-amount';
@@ -92,26 +91,22 @@ export class WalletController {
   async createRuleCategory(
     @Req() req,
     @Param('walletId') walletId: string,
-    @Body() createRuleCategoryDto: CreateRuleCategoryDto,
-  ) {}
+    @Body(new ParseArrayPipe({ items: CreateRuleCategoryDto }))
+    createRuleCategoryDto: CreateRuleCategoryDto[],
+  ) {
+    const userId = req.user.id;
+    return this.walletService.createRuleCategory(
+      userId,
+      +walletId,
+      createRuleCategoryDto,
+    );
+  }
 
   @Get(':walletId/rule/category')
-  async findAllRuleCategory(@Req() req, @Param('walletId') walletId: string) {}
-
-  @Get(':walletId/rule/category/:id')
-  async findOneRuleCategory(
-    @Req() req,
-    @Param('walletId') walletId: string,
-    @Param('id') id: string,
-  ) {}
-
-  @Patch(':walletId/rule/category/:id')
-  async updateRuleCategory(
-    @Req() req,
-    @Param('walletId') walletId: string,
-    @Param('id') id: string,
-    @Body() updateRuleCategoryDto: UpdateRuleCategoryDto,
-  ) {}
+  async findAllRuleCategory(@Req() req, @Param('walletId') walletId: string) {
+    const userId = req.user.id;
+    return this.walletService.findAllRuleCategory(userId, +walletId);
+  }
 
   @Delete(':walletId/rule/category/:id')
   async deleteRuleCategory(

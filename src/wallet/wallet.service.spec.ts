@@ -9,6 +9,12 @@ import { RulesCategoryAmountService } from '../rules/rules-category-amount.servi
 const repositoryMock = {
   insert: jest.fn(),
 };
+
+const FakUsersService = {};
+const FakRulesTypeService = {};
+const FakRulesCategoryService = {};
+const FakRulesCoinService = {};
+const FakRulesCategoryAmountService = {};
 describe('WalletService', () => {
   let service: WalletService;
 
@@ -30,14 +36,79 @@ describe('WalletService', () => {
         if (token === 'RulePercentCategoryRepository') return repositoryMock;
         if (token === 'RulePercentCoinRepository') return repositoryMock;
         if (token === 'RuleAmountCategoryRepository') return repositoryMock;
-        // if (token === RulesTypeService) return;
+        if (token === UsersService) return FakUsersService;
+        if (token === RulesTypeService) return FakRulesTypeService;
+        if (token === RulesCategoryService) return FakRulesCategoryService;
+        if (token === RulesCoinService) return FakRulesCoinService;
+        if (token === RulesCategoryAmountService)
+          return FakRulesCategoryAmountService;
       })
       .compile();
 
     service = module.get<WalletService>(WalletService);
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+  describe('wallet', () => {
+    describe('.create', () => {
+      it('should return success', async () => {
+        expect(service).toBeDefined();
+      });
+
+      it('should return faill user not found', async () => {
+        expect(service).toBeDefined();
+      });
+    });
+
+    describe('.findAll', () => {
+      it('should return list wallets', async () => {
+        expect(service).toBeDefined();
+      });
+    });
+
+    describe('.findOne', () => {
+      it('should return wallet', async () => {
+        expect(service).toBeDefined();
+      });
+
+      it('should return does not fund wallet for user', async () => {
+        expect(service).toBeDefined();
+      });
+    });
+
+    describe('.update', () => {
+      it('should modify wallet with dto', async () => {
+        expect(service).toBeDefined();
+      });
+
+      it('should return does not found wallet for user', async () => {
+        expect(service).toBeDefined();
+      });
+    });
+
+    describe('.remove', () => {
+      it('should return succesfully', async () => {
+        expect(service).toBeDefined();
+      });
+    });
+  });
+
+  describe('ruleType', () => {
+    describe('.createRuleType', () => {
+      it('should be defined', async () => {
+        expect(service).toBeDefined();
+      });
+    });
+
+    describe('.findAllRuleType', () => {
+      it('should be defined', async () => {
+        expect(service).toBeDefined();
+      });
+    });
+
+    describe('.deleteAllRuleType', () => {
+      it('should be defined', async () => {
+        expect(service).toBeDefined();
+      });
+    });
   });
 });
