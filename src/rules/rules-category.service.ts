@@ -55,7 +55,9 @@ export class RulesCategoryService {
       return (value += element.percent);
     }, 0);
     if (amount === 100) return true;
-    throw new BadRequestException('the max percente all type required is 100');
+    throw new BadRequestException(
+      'the max percente all category required is 100',
+    );
   }
 
   private async findByWallet(walletId: number) {

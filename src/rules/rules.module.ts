@@ -3,7 +3,7 @@ import { RulesTypeService } from './rules-type.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RulePercentType } from './entities/rule-percent-type.entity';
 import { RulePercentCategory } from './entities/rule-percent-category.entity';
-import { RulePercentCoin } from './entities/rule-percente-coin';
+import { RulePercentCoin } from './entities/rule-percente-coin.entity';
 import { RuleAmountCategory } from './entities/rule-amount-category';
 import { RulesCategoryService } from './rules-category.service';
 import { RulesCoinService } from './rules-coin.service';

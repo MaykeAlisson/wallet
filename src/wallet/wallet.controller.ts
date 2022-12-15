@@ -17,7 +17,6 @@ import { AuthGuard } from '@nestjs/passport';
 import { CreateRuleTypeDto } from '../rules/dto/create-rule-type.dto';
 import { CreateRuleCategoryDto } from '../rules/dto/create-rule-category';
 import { CreateRuleCoinDto } from '../rules/dto/create-rule-coin';
-import { UpdateRuleCoinDto } from '../rules/dto/update-rule-coin';
 import { CreateRuleCategoryAmountDto } from '../rules/dto/create-rule-category-amount';
 import { UpdateRuleCategoryAmountDto } from '../rules/dto/update-rule-category-amount';
 
@@ -118,53 +117,41 @@ export class WalletController {
   async createRuleCoin(
     @Req() req,
     @Param('walletId') walletId: string,
-    @Body() createRuleCoinDto: CreateRuleCoinDto,
-  ) {}
+    @Body(new ParseArrayPipe({ items: CreateRuleCoinDto }))
+    dtos: CreateRuleCoinDto[],
+  ) {
+    const userId = req.user.id;
+    return this.walletService.createRuleCoin(userId, +walletId, dtos);
+  }
 
   @Get(':walletId/rule/coin')
-  async findAllRuleCoin(@Req() req, @Param('walletId') walletId: string) {}
+  async findAllRuleCoin(@Req() req, @Param('walletId') walletId: string) {
+    const userId = req.user.id;
+    return this.walletService.findAllRuleCoin(userId, +walletId);
+  }
 
-  @Get(':walletId/rule/coin/:id')
-  async findOneRuleCoin(
-    @Req() req,
-    @Param('walletId') walletId: string,
-    @Param('id') id: string,
-  ) {}
-
-  @Patch(':walletId/rule/coin/:id')
-  async updateRuleCoin(
-    @Req() req,
-    @Param('walletId') walletId: string,
-    @Param('id') id: string,
-    @Body() updateRuleCoinDto: UpdateRuleCoinDto,
-  ) {}
-
-  @Delete(':walletId/rule/coin/:id')
-  async deleteRuleCoin(
-    @Req() req,
-    @Param('walletId') walletId: string,
-    @Param('id') id: string,
-  ) {}
+  @Delete(':walletId/rule/coin')
+  async deleteRuleCoin(@Req() req, @Param('walletId') walletId: string) {
+    const userId = req.user.id;
+    return this.walletService.deleteAllRuleCoin(userId, +walletId);
+  }
 
   @Post(':walletId/rule/category-amount')
   async createRuleAmountCategory(
     @Req() req,
     @Param('walletId') walletId: string,
     @Body() createRuleCategoryAmountDto: CreateRuleCategoryAmountDto,
-  ) {}
+  ) {
+    const userId = req.user.id;
+  }
 
   @Get(':walletId/rule/category-amount')
   async findAllRuleAmountCategory(
     @Req() req,
     @Param('walletId') walletId: string,
-  ) {}
-
-  @Get(':walletId/rule/category-amount/:id')
-  async findOneRuleAmountCategory(
-    @Req() req,
-    @Param('walletId') walletId: string,
-    @Param('id') id: string,
-  ) {}
+  ) {
+    const userId = req.user.id;
+  }
 
   @Patch(':walletId/rule/category-amount/:id')
   async updateRuleAmountCategory(
@@ -172,12 +159,16 @@ export class WalletController {
     @Param('walletId') walletId: string,
     @Param('id') id: string,
     @Body() updateRuleAmountCategoryDto: UpdateRuleCategoryAmountDto,
-  ) {}
+  ) {
+    const userId = req.user.id;
+  }
 
   @Delete(':walletId/rule/category-amount/:id')
   async deleteRuleAmountCategory(
     @Req() req,
     @Param('walletId') walletId: string,
     @Param('id') id: string,
-  ) {}
+  ) {
+    const userId = req.user.id;
+  }
 }
