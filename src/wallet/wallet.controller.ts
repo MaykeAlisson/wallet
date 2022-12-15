@@ -108,12 +108,11 @@ export class WalletController {
     return this.walletService.findAllRuleCategory(userId, +walletId);
   }
 
-  @Delete(':walletId/rule/category/:id')
-  async deleteRuleCategory(
-    @Req() req,
-    @Param('walletId') walletId: string,
-    @Param('id') id: string,
-  ) {}
+  @Delete(':walletId/rule/category')
+  async deleteRuleCategory(@Req() req, @Param('walletId') walletId: string) {
+    const userId = req.user.id;
+    return this.walletService.deleteAllRuleCategory(userId, +walletId);
+  }
 
   @Post(':walletId/rule/coin')
   async createRuleCoin(

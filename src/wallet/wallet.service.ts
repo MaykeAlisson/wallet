@@ -109,8 +109,9 @@ export class WalletService {
     return this.rulesCategoryService.findAll(walletId);
   }
 
-  async deleteRuleCategory(userId: number, walletId: number) {
+  async deleteAllRuleCategory(userId: number, walletId: number) {
     await this.findByIdAndUser(walletId, userId);
+    return this.rulesCategoryService.remove(walletId);
   }
 
   private async findByIdAndUser(id: number, userId: number): Promise<Wallet> {

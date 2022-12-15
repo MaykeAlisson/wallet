@@ -35,8 +35,10 @@ export class RulesCategoryService {
     return this.findByWallet(walletId);
   }
 
-  async remove(id: number) {
-    return `This action removes a #${id} rule`;
+  async remove(walletId: number) {
+    const rules = await this.findByWallet(walletId);
+    rules.forEach(async (rule) => await this.deleteRule(rule));
+    return {};
   }
 
   private removeDuplicate(rules: CreateRuleCategoryDto[]) {
