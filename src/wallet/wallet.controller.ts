@@ -140,9 +140,11 @@ export class WalletController {
   async createRuleAmountCategory(
     @Req() req,
     @Param('walletId') walletId: string,
-    @Body() createRuleCategoryAmountDto: CreateRuleCategoryAmountDto,
+    @Body(new ParseArrayPipe({ items: CreateRuleCategoryAmountDto }))
+    dtos: CreateRuleCategoryAmountDto[],
   ) {
     const userId = req.user.id;
+    return this.walletService.createRuleCategoryAmount(userId, +walletId, dtos);
   }
 
   @Get(':walletId/rule/category-amount')
@@ -151,6 +153,7 @@ export class WalletController {
     @Param('walletId') walletId: string,
   ) {
     const userId = req.user.id;
+    return this.walletService.findAllRuleCategoryAmount(userId, +walletId);
   }
 
   @Patch(':walletId/rule/category-amount/:id')
@@ -161,6 +164,12 @@ export class WalletController {
     @Body() updateRuleAmountCategoryDto: UpdateRuleCategoryAmountDto,
   ) {
     const userId = req.user.id;
+    return this.walletService.updateRuleCategoryAmount(
+      userId,
+      +walletId,
+      +id,
+      updateRuleAmountCategoryDto,
+    );
   }
 
   @Delete(':walletId/rule/category-amount/:id')
@@ -170,5 +179,6 @@ export class WalletController {
     @Param('id') id: string,
   ) {
     const userId = req.user.id;
+    return this.walletService.deleteRuleCategoryAmount(userId, +walletId, +id);
   }
 }

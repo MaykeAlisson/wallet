@@ -14,6 +14,8 @@ import { User } from '../users/entities/user.entity';
 import { CreateRuleTypeDto } from '../rules/dto/create-rule-type.dto';
 import { CreateRuleCategoryDto } from 'src/rules/dto/create-rule-category';
 import { CreateRuleCoinDto } from 'src/rules/dto/create-rule-coin';
+import { UpdateRuleCategoryAmountDto } from 'src/rules/dto/update-rule-category-amount';
+import { CreateRuleCategoryAmountDto } from 'src/rules/dto/create-rule-category-amount';
 
 @Injectable()
 export class WalletService {
@@ -132,6 +134,35 @@ export class WalletService {
   async deleteAllRuleCoin(userId: number, walletId: number) {
     await this.findByIdAndUser(walletId, userId);
     return this.rulesCoinService.remove(walletId);
+  }
+
+  async createRuleCategoryAmount(
+    userId: number,
+    walletId: number,
+    dtos: CreateRuleCategoryAmountDto[],
+  ) {
+    await this.findByIdAndUser(walletId, userId);
+    return this.rulesCategoryAmountSevice.createRule(walletId, dtos);
+  }
+
+  async findAllRuleCategoryAmount(userId: number, walletId: number) {
+    await this.findByIdAndUser(walletId, userId);
+    return this.rulesCategoryAmountSevice.findAll(walletId);
+  }
+
+  async updateRuleCategoryAmount(
+    userId: number,
+    walletId: number,
+    id: number,
+    dto: UpdateRuleCategoryAmountDto,
+  ) {
+    await this.findByIdAndUser(walletId, userId);
+    return this.rulesCategoryAmountSevice.update(walletId, id, dto);
+  }
+
+  async deleteRuleCategoryAmount(userId: number, walletId: number, id: number) {
+    await this.findByIdAndUser(walletId, userId);
+    return this.rulesCategoryAmountSevice.remove(walletId, id);
   }
 
   private async findByIdAndUser(id: number, userId: number): Promise<Wallet> {
