@@ -54,7 +54,19 @@ export class WalletService {
 
   async findOne(userId: number, id: number) {
     await this.checkUser(userId);
-    const wallet = this.findByIdAndUser(id, userId);
+    const wallet = await this.findByIdAndUser(id, userId);
+    return wallet;
+  }
+
+  async findOneDetails(userId: number, id: number) {
+    await this.checkUser(userId);
+    const wallet = await this.findByIdAndUser(id, userId);
+    return wallet;
+  }
+
+  async findOneRules(userId: number, id: number) {
+    await this.checkUser(userId);
+    const wallet = await this.findByIdAndUser(id, userId);
     return wallet;
   }
 
