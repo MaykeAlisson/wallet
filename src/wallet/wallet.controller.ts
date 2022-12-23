@@ -21,7 +21,7 @@ import { CreateRuleCategoryAmountDto } from '../rules/dto/create-rule-category-a
 import { UpdateRuleCategoryAmountDto } from '../rules/dto/update-rule-category-amount';
 
 @UseGuards(AuthGuard('jwt'))
-@Controller('wallet')
+@Controller('wallets')
 export class WalletController {
   constructor(private readonly walletService: WalletService) {}
 

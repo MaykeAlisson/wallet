@@ -165,7 +165,7 @@ export class WalletService {
     return this.rulesCategoryAmountSevice.remove(walletId, id);
   }
 
-  private async findByIdAndUser(id: number, userId: number): Promise<Wallet> {
+  public async findByIdAndUser(id: number, userId: number): Promise<Wallet> {
     await this.checkUser(userId);
     const wallet = await this.walletRepository.findOneBy({ id, userId });
     if (!wallet)
