@@ -43,6 +43,18 @@ export class WalletController {
     return await this.walletService.findOne(userId, +id);
   }
 
+  @Get(':id/details')
+  async findOneDetails(@Req() req, @Param('id') id: string) {
+    const userId = req.user.id;
+    return await this.walletService.findOneDetails(userId, +id);
+  }
+
+  @Get(':id/rules')
+  async findOneRules(@Req() req, @Param('id') id: string) {
+    const userId = req.user.id;
+    return await this.walletService.findOneRules(userId, +id);
+  }
+
   @Patch(':id')
   async update(
     @Req() req,

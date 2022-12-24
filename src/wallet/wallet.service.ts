@@ -3,7 +3,7 @@ import { CreateWalletDto } from './dto/create-wallet.dto';
 import { UpdateWalletDto } from './dto/update-wallet.dto';
 import { Wallet } from './entities/wallet.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, EntityManager, Repository } from 'typeorm';
 import { nvl } from './provider/wallet.nvl';
 import { RulesTypeService } from '../rules/rules-type.service';
 import { RulesCategoryService } from '../rules/rules-category.service';
@@ -16,10 +16,13 @@ import { CreateRuleCategoryDto } from 'src/rules/dto/create-rule-category';
 import { CreateRuleCoinDto } from 'src/rules/dto/create-rule-coin';
 import { UpdateRuleCategoryAmountDto } from 'src/rules/dto/update-rule-category-amount';
 import { CreateRuleCategoryAmountDto } from 'src/rules/dto/create-rule-category-amount';
+import { Assert } from 'src/asserts/entities/assert.entity';
+import Decimal from 'decimal.js';
 
 @Injectable()
 export class WalletService {
   constructor(
+    private readonly dataSource: DataSource,
     @InjectRepository(Wallet)
     private readonly walletRepository: Repository<Wallet>,
     private readonly userService: UsersService,
@@ -60,14 +63,34 @@ export class WalletService {
 
   async findOneDetails(userId: number, id: number) {
     await this.checkUser(userId);
-    const wallet = await this.findByIdAndUser(id, userId);
-    return wallet;
+    const transaction = await this.dataSource.manager.transaction(
+      'SERIALIZABLE',
+      async (transactionManager) => {
+        await this.findByIdAndUser(id, userId);
+        return this.findDetails(transactionManager, id);
+      },
+    );
+
+    return transaction;
   }
 
   async findOneRules(userId: number, id: number) {
     await this.checkUser(userId);
-    const wallet = await this.findByIdAndUser(id, userId);
-    return wallet;
+    await this.findByIdAndUser(id, userId);
+    const rulesType = await this.findAllRuleType(userId, id);
+    const rulesCategory = await this.findAllRuleCategory(userId, id);
+    const rulesCoin = await this.findAllRuleCoin(userId, id);
+    const rulesCategoryAmount = await this.findAllRuleCategoryAmount(
+      userId,
+      id,
+    );
+
+    return {
+      type: rulesType,
+      category: rulesCategory,
+      category_amount: rulesCategoryAmount,
+      coin: rulesCoin,
+    };
   }
 
   async update(id: number, updateWalletDto: UpdateWalletDto, userId: number) {
@@ -189,5 +212,87 @@ export class WalletService {
 
   private async checkUser(userId: number): Promise<User> {
     return await this.userService.userById(userId);
+  }
+
+  private async findDetails(manager: EntityManager, walletId: number) {
+    const { amount } = await manager
+      .getRepository(Assert)
+      .createQueryBuilder('assert')
+      .select('SUM(assert.amount * assert.price)', 'amount')
+      .where('assert.wallet_id = :walletId', { walletId })
+      .getRawOne();
+
+    const type = await manager
+      .getRepository(Assert)
+      .createQueryBuilder('a')
+      .select('a.type, SUM(a.amount * a.price)', 'amount')
+      .where('a.wallet_id = :walletId', { walletId })
+      .groupBy('a.type')
+      .getRawMany();
+
+    const percentType = this.percentType(type, amount);
+
+    const categorys = await manager
+      .getRepository(Assert)
+      .createQueryBuilder('a')
+      .select('a.category, SUM(a.amount * a.price)', 'amount')
+      .where('a.wallet_id = :walletId', { walletId })
+      .groupBy('a.category')
+      .getRawMany();
+
+    const percentCategory = this.percentCategory(categorys, amount);
+
+    const categoryQtd = await manager
+      .getRepository(Assert)
+      .createQueryBuilder('a')
+      .select('a.category, COUNT(a.name)', 'amount')
+      .where('a.wallet_id = :walletId', { walletId })
+      .groupBy('a.category')
+      .getRawMany();
+
+    const coins = await manager
+      .getRepository(Assert)
+      .createQueryBuilder('a')
+      .select('a.coin, SUM(a.amount * a.price)', 'amount')
+      .where('a.wallet_id = :walletId', { walletId })
+      .groupBy('a.coin')
+      .getRawMany();
+
+    const percentCoin = this.percentCoin(coins, amount);
+
+    return {
+      amount: amount,
+      type: percentType,
+      category: percentCategory,
+      category_amount: categoryQtd,
+      coin: percentCoin,
+    };
+  }
+
+  private percentType(types: Array<any>, amount: number) {
+    return types.map((value) => {
+      return {
+        type: value.type,
+        percent: new Decimal(value.amount).div(amount).mul(100).toFixed(2),
+      };
+    });
+  }
+
+  private percentCategory(categorys: Array<any>, amount: number) {
+    return categorys.map((value) => {
+      return {
+        category: value.category,
+        percent: new Decimal(value.amount).div(amount).mul(100).toFixed(2),
+      };
+    });
+  }
+
+  private percentCoin(coins: Array<any>, amount: number) {
+    return coins.map((value) => {
+      return {
+        category: value.coin,
+        percent: new Decimal(value.amount).div(amount).mul(100).toFixed(2),
+      };
+    });
   }
 }
